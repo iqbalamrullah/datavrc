@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Yearbook - Cek Data</title>
 <style>
 /* ===== BODY & BACKGROUND ===== */
@@ -11,16 +11,16 @@ body {
   margin: 0;
   padding: 20px;
   display: flex;
-  align-items: center;
   justify-content: center;
+  flex-direction: column; /* supaya konten bertumpuk vertikal */
   min-height: 100vh;
   position: relative;
-  overflow: hidden;
+  overflow: auto; /* biar scroll bisa muncul di HP */
 }
 
 body::before {
   content: '';
-  position: absolute;
+  position: fixed; /* fixed supaya background selalu ada */
   top: 0; left: 0;
   width: 100%;
   height: 100%;
@@ -33,11 +33,11 @@ body::before {
 
 body::after {
   content: '';
-  position: absolute;
+  position: fixed;
   top: 0; left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0,0,0,0.3); /* overlay lebih ringan */
   z-index: -1;
 }
 
@@ -45,12 +45,13 @@ body::after {
 .card {
   width: 100%;
   max-width: 520px;
-  background: rgba(255,255,255,0.2);
+  margin: 20px auto;
+  background: rgba(255,255,255,0.2); /* transparan untuk blur */
   padding: 25px;
   border-radius: 20px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-  backdrop-filter: blur(15px);
-  color: #111827;
+  backdrop-filter: blur(15px); /* blur tetap ada */
+  color: #fff; /* teks putih biar terbaca */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -64,14 +65,14 @@ h1 {
   text-align: center;
   font-size: 24px;
   margin-bottom: 20px;
-  color: #fff;
+  color: #111827;
 }
 
 label {
   font-weight: 600;
   margin-top: 15px;
   display: block;
-  color: #fff;
+  color: #111827;
 }
 
 select, input[type="date"], button {
