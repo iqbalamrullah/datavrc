@@ -139,6 +139,13 @@ button:hover {
   font-size: 14px;
 }
 
+.error-msg {
+  color: #b91c1c;
+  font-weight: 700;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
 @keyframes fadeIn {
   from {opacity:0; transform: translateY(-10px);}
   to {opacity:1; transform: translateY(0);}
@@ -159,7 +166,7 @@ button:hover {
   <input type="date" id="tgl">
 
   <button id="btn">Lihat Data</button>
-  <div id="error" class="error"></div>
+  <div id="error" class="error-msg"></div>
 
   <div id="result" class="result">
     <div>
@@ -284,7 +291,8 @@ selKelas.addEventListener('change',()=>{
 });
 
 btn.addEventListener('click',()=>{
-    boxResult.style.display='none'; boxError.textContent='';
+    boxResult.style.display='none'; 
+    boxError.textContent='';
     r_nama_notice.textContent = '';
     r_quotes_notice.textContent = '';
 
@@ -300,7 +308,11 @@ btn.addEventListener('click',()=>{
                r.nama.trim()===nama &&
                r.tanggal_lahir===tgl;
     });
-    if(!found){ boxError.textContent='Data tidak ditemukan (cek kelas/nama/tanggal lahir)'; return; }
+
+    if(!found){ 
+        boxError.textContent='Data tidak ditemukan (cek kelas/nama/tanggal lahir)'; 
+        return; 
+    }
 
     r_nama.textContent = found.nama;
     r_tempat.textContent = found.tempat_lahir || '-';
