@@ -12,15 +12,15 @@ body {
   padding: 20px;
   display: flex;
   justify-content: center;
-  flex-direction: column; /* supaya konten bertumpuk vertikal */
+  flex-direction: column;
   min-height: 100vh;
   position: relative;
-  overflow: auto; /* biar scroll bisa muncul di HP */
+  overflow: auto; 
 }
 
 body::before {
   content: '';
-  position: fixed; /* fixed supaya background selalu ada */
+  position: fixed;
   top: 0; left: 0;
   width: 100%;
   height: 100%;
@@ -37,7 +37,7 @@ body::after {
   top: 0; left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.3); /* overlay lebih ringan */
+  background-color: rgba(0,0,0,0.3);
   z-index: -1;
 }
 
@@ -46,12 +46,12 @@ body::after {
   width: 100%;
   max-width: 520px;
   margin: 20px auto;
-  background: rgba(255,255,255,0.2); /* transparan untuk blur */
+  background: rgba(255,255,255,0.2);
   padding: 25px;
   border-radius: 20px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-  backdrop-filter: blur(15px); /* blur tetap ada */
-  color: #fff; /* teks putih biar terbaca */
+  backdrop-filter: blur(15px);
+  color: #fff;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -169,9 +169,51 @@ button:hover {
   from {opacity:0; transform: translateY(-10px);}
   to {opacity:1; transform: translateY(0);}
 }
+
+/* ===== PHOTOSHOOT COUNTDOWN SECTION ===== */
+.photoshoot-box {
+  margin: 25px auto 10px auto;
+  width: 100%;
+  max-width: 520px;
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  text-align: center;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+.photoshoot-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.photoshoot-date {
+  font-size: 15px;
+  opacity: 0.9;
+}
+
+.countdown-box {
+  margin-top: 15px;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
 </style>
 </head>
 <body>
+
+<!-- ================= CARD FORM ================ -->
 <div class="card">
   <h1>Cek Data Yearbook</h1>
 
@@ -210,8 +252,46 @@ button:hover {
   </div>
 </div>
 
+
+
+<!-- ================= PHOTOSHOOT SECTION ================ -->
+<div class="photoshoot-box">
+  <div class="photoshoot-title">📸 Photoshoot Yearbook</div>
+  <div class="photoshoot-date">26 – 31 Januari 2026</div>
+  <div id="countdown" class="countdown-box">Loading...</div>
+</div>
+
+
+
+<!-- ================= SCRIPT ================= -->
 <script>
-// ===== SCRIPT DATA =====
+/* ===== COUNTDOWN SCRIPT ===== */
+function updateCountdown() {
+  const eventDate = new Date("2026-01-26T00:00:00");
+  const now = new Date();
+  const diff = eventDate - now;
+
+  const box = document.getElementById("countdown");
+
+  if (diff <= 0) {
+    box.textContent = "📸 Sedang berlangsung!";
+    return;
+  }
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const mins = Math.floor((diff / (1000 * 60)) % 60);
+  const secs = Math.floor((diff / 1000) % 60);
+
+  box.textContent = `H-${days} • ${hours}j ${mins}m ${secs}d`;
+}
+
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+
+
+/* ===== SCRIPT DATA YEARBOOK (PUNYA KAMU) ===== */
 const SPREADSHEET_ID = "1uvTlImAizIXasaLOxagWCAaOax3TB9Z0eub34TFUxV8";
 const GID = "664816169";
 const CSV_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=${GID}&t=${Date.now()}`;
@@ -294,7 +374,8 @@ function populateKelas(){
         const opt = document.createElement('option'); opt.value=k; opt.textContent=k;
         selKelas.appendChild(opt);
     });
-    selNama.innerHTML='<option value="">Pilih kelas dulu...</option>'; selNama.disabled=true;
+    selNama.innerHTML='<option value="">Pilih kelas dulu...</option>';
+    selNama.disabled=true;
 }
 
 selKelas.addEventListener('change',()=>{
@@ -307,7 +388,9 @@ selKelas.addEventListener('change',()=>{
         selNama.appendChild(opt);
     });
     selNama.disabled = names.length===0;
-    inputTgl.value=''; boxResult.style.display='none'; boxError.textContent='';
+    inputTgl.value='';
+    boxResult.style.display='none';
+    boxError.textContent='';
 });
 
 btn.addEventListener('click',()=>{
@@ -330,7 +413,6 @@ btn.addEventListener('click',()=>{
     });
     if(!found){ 
         boxError.textContent='Data tidak ditemukan (cek kelas/nama/tanggal lahir)';
-        boxError.style.color = '#b91c1c'; // merah
         return; 
     }
 
@@ -340,24 +422,22 @@ btn.addEventListener('click',()=>{
     r_quotes.textContent = found.quotes || '-';
     r_ig.textContent = found.ig || '-';
 
-    // Nama
     const namaLength = found.nama.length;
     r_nama_count.textContent = `(${namaLength}/20 karakter)`;
     r_nama_count.classList.remove('warning');
     if(namaLength > 20){
         r_nama_count.textContent += ' ⚠ Terlalu panjang!';
         r_nama_count.classList.add('warning');
-        r_nama_notice.textContent = "⚠️ Nama melebihi batas. Silakan hubungi PJ kelas masing-masing.";
+        r_nama_notice.textContent = "⚠️ Nama melebihi batas. Silakan hubungi PJ kelas.";
     }
 
-    // Quotes
     const quotesWords = found.quotes ? found.quotes.trim().split(/\s+/) : [];
     r_quotes_count.textContent = `(${quotesWords.length}/10 kata)`;
     r_quotes_count.classList.remove('warning');
     if(quotesWords.length > 10){
         r_quotes_count.textContent += ' ⚠ Terlalu panjang!';
         r_quotes_count.classList.add('warning');
-        r_quotes_notice.textContent = "⚠️ Quotes melebihi batas. Silakan hubungi PJ kelas masing-masing.";
+        r_quotes_notice.textContent = "⚠️ Quotes melebihi batas. Silakan hubungi PJ kelas.";
     }
 
     boxResult.style.display='block';
